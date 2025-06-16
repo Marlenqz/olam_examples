@@ -1,0 +1,23 @@
+---
+- name: Verificar Ksplice en Oracle Linux
+  hosts: all
+  become: true
+  tasks:
+    - name: Verificar si Ksplice está instalado
+      command: rpm -q uptrack
+      register: ksplice_installed
+      ignore_errors: yes
+
+    - name: Instalar Ksplice si no está instalado
+      dnf:
+        name: ksplice
+        state: present
+      when: ksplice_installed.rc != 0
+
+    - name: Verificar si Ksplice está activo
+      command: uptrack-uname -r
+      register: kernel_ksplice
+
+    - name: Mostrar kernel activo con Ksplice
+      debug:
+        msg: "Kernel con Ksplice: {{ kernel_ksplice.stdout }}"
