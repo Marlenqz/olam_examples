@@ -1,5 +1,5 @@
 ---
-- name: Ejecutar SELECT version() en MariaDB
+- name: Ejecutar SELECT VERSION() en MariaDB
   hosts: all
   gather_facts: false
   tasks:

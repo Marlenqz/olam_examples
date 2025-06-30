@@ -1,0 +1,16 @@
+---
+- name: Rollback de cambios MariaDB y Ksplice
+  hosts: all
+  become: true
+  tasks:
+    - name: Eliminar usuario demo_auto
+      community.mysql.mysql_user:
+        login_user: olam
+        login_password: Olam1234
+        login_host: "{{ inventory_hostname }}"
+        name: demo_auto
+        host: "%"
+        state: absent
+
+    - name: Revertir actualizaciones Ksplice
+      command: ksplice kernel remove --all

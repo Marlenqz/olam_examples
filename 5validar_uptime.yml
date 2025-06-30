@@ -1,0 +1,7 @@
+---
+- name: Validar que el nodo no se reinició
+  hosts: all
+  become: true
+  tasks:
+    - name: Mostrar uptime
+      command: uptime

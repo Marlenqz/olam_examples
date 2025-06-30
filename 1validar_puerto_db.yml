@@ -3,14 +3,8 @@
   hosts: all
   gather_facts: false
   tasks:
-
     - name: Verificar que el puerto 3306 está abierto
       wait_for:
         host: "{{ inventory_hostname }}"
         port: 3306
         timeout: 5
-      register: port_check
-
-    - name: Mostrar resultado de la validación
-      debug:
-        msg: "El puerto 3306 está accesible en {{ inventory_hostname }}"
