@@ -3,14 +3,10 @@
   hosts: all
   become: true
   tasks:
-    - name: Eliminar usuario demo_auto
-      community.mysql.mysql_user:
-        login_user: olam
-        login_password: Olam1234
-        login_host: "{{ inventory_hostname }}"
-        name: demo_auto
-        host: "%"
-        state: absent
+    
+    - name: Crear usuario demo_auto
+      shell: "mysql -uroot -e \"CREATE USER 'demo_auto'@'%' IDENTIFIED BY 'Demo1234'; GRANT ALL PRIVILEGES ON *.* TO 'demo_auto'@'%'; FLUSH PRIVILEGES;\""
+
 
     - name: Revertir actualizaciones Ksplice
       command: ksplice kernel remove --all
