@@ -1,11 +1,12 @@
 ---
-- name: Ejecutar SELECT VERSION() en MariaDB
+- name: Consultar versión de MariaDB sin módulos externos
   hosts: all
-  gather_facts: false
+  gather_facts: no
   tasks:
-    - name: Ejecutar consulta de versión
-      community.mysql.mysql_query:
-        login_user: olam
-        login_password: Olam1234
-        login_host: "{{ inventory_hostname }}"
-        query: SELECT VERSION();
+    - name: Ejecutar SELECT VERSION()
+      shell: "mysql -uroot -e 'SELECT VERSION();'"
+      register: resultado_version
+
+    - name: Mostrar versión
+      debug:
+        msg: "La versión de MariaDB en {{ inventory_hostname }} es: {{ resultado_version.stdout }}"
