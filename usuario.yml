@@ -1,0 +1,7 @@
+---
+- name: Crear usuario demo_auto en MariaDB sin módulos externos
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Crear usuario demo_auto
+      shell: "mysql -uroot -e \"CREATE USER 'demo_auto'@'%' IDENTIFIED BY 'Demo1234'; GRANT ALL PRIVILEGES ON *.* TO 'demo_auto'@'%'; FLUSH PRIVILEGES;\""
