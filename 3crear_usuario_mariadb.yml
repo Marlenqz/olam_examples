@@ -1,0 +1,15 @@
+---
+- name: Crear usuario demo_auto en MariaDB
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Crear usuario demo_auto
+      community.mysql.mysql_user:
+        login_user: olam
+        login_password: Olam1234
+        login_host: "{{ inventory_hostname }}"
+        name: demo_auto
+        password: Demo1234
+        priv: "*.*:ALL"
+        host: "%"
+        state: present

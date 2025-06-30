@@ -1,0 +1,10 @@
+---
+- name: Validar conexión al puerto 3306 (MariaDB)
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Verificar que el puerto 3306 está abierto
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 3306
+        timeout: 5
