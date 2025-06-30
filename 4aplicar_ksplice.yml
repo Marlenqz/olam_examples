@@ -4,4 +4,4 @@
   become: true
   tasks:
     - name: Ejecutar Ksplice auto-update
-      command: ksplice --auto-update
+      command: ksplice kernel upgrade
