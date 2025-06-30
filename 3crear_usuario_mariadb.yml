@@ -1,15 +1,7 @@
 ---
-- name: Crear usuario demo_auto en MariaDB
+- name: Crear usuario demo_auto en MariaDB sin módulos externos
   hosts: all
-  gather_facts: false
+  gather_facts: no
   tasks:
     - name: Crear usuario demo_auto
-      community.mysql.mysql_user:
-        login_user: olam
-        login_password: Olam1234
-        login_host: "{{ inventory_hostname }}"
-        name: demo_auto
-        password: Demo1234
-        priv: "*.*:ALL"
-        host: "%"
-        state: present
+      shell: "mysql -uroot -e \"CREATE USER 'demo_auto'@'%' IDENTIFIED BY 'Demo1234'; GRANT ALL PRIVILEGES ON *.* TO 'demo_auto'@'%'; FLUSH PRIVILEGES;\""
