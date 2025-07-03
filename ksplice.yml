@@ -1,0 +1,41 @@
+---
+- name: Demo Ksplice - Actualizaciones sin reinicio
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Mostrar versión actual del kernel
+      command: uname -r
+      register: kernel_version
+
+    - name: Mostrar versión actual cargada por Ksplice
+      command: uptrack-uname -r
+      register: ksplice_version
+      ignore_errors: yes
+
+    - name: Mostrar información actual
+      debug:
+        msg: |
+          Versión de kernel reportada por el sistema: {{ kernel_version.stdout }}
+          Versión cargada por Ksplice: {{ ksplice_version.stdout | default('Ksplice no instalado o no activo') }}
+
+    - name: Aplicar actualizaciones de Ksplice sin reiniciar
+      command: ksplice --upgrade
+      register: ksplice_upgrade
+      ignore_errors: yes
+
+    - name: Mostrar resultado de la actualización
+      debug:
+        msg: "{{ ksplice_upgrade.stdout | default('No se pudo ejecutar Ksplice o no hay actualizaciones') }}"
+
+    - name: Verificar versión de Ksplice después de la actualización
+      command: uptrack-uname -r
+      register: ksplice_version_post
+      ignore_errors: yes
+
+    - name: Mostrar información final
+      debug:
+        msg: |
+          Versión final reportada por el sistema: {{ kernel_version.stdout }}
+          Versión final cargada por Ksplice: {{ ksplice_version_post.stdout | default('Ksplice no instalado o no activo') }}
