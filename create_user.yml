@@ -1,0 +1,11 @@
+---
+- name: Crear usuario basado en survey
+  hosts: all
+  become: true
+  vars:
+    username: "{{ user_to_create }}"
+  tasks:
+    - name: Crear el usuario solicitado
+      ansible.builtin.user:
+        name: "{{ username }}"
+        state: present
