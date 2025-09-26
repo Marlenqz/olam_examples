@@ -1,0 +1,15 @@
+---
+- name: Verificar que Apache responde en puerto 80
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Hacer request a localhost
+      uri:
+        url: http://localhost
+        return_content: yes
+      register: result
+
+    - name: Mostrar contenido recibido
+      debug:
+        msg: "Respuesta: {{ result.content }}"
