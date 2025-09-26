@@ -1,0 +1,63 @@
+---
+- name: Rollback de la pila web (Apache + index + firewall + usuario)
+  hosts: all
+  become: true
+
+  vars:
+    web_user: appuser
+    index_path: /var/www/html/index.html
+    httpd_service: httpd
+    httpd_pkg: httpd
+    firewall_service: firewalld
+    firewall_zone: public
+
+  tasks:
+    - name: Detener y deshabilitar Apache
+      service:
+        name: "{{ httpd_service }}"
+        state: stopped
+        enabled: false
+      ignore_errors: true  # por si no estaba instalado
+
+    - name: Eliminar index.html si existe
+      file:
+        path: "{{ index_path }}"
+        state: absent
+
+    - name: Desinstalar paquete httpd
+      yum:
+        name: "{{ httpd_pkg }}"
+        state: absent
+      ignore_errors: true
+
+    - name: Recolectar estado de servicios (para detectar firewalld)
+      service_facts:
+
+    - name: Deshabilitar servicio HTTP en firewalld (si está presente)
+      when: "'{{ firewall_service }}.service' in services"
+      firewalld:
+        service: http
+        permanent: true
+        state: disabled
+        immediate: true
+        zone: "{{ firewall_zone }}"
+      ignore_errors: true
+
+    - name: Asegurar que el puerto 80 ya no esté escuchando (mejor esfuerzo)
+      wait_for:
+        host: 127.0.0.1
+        port: 80
+        state: absent
+        timeout: 10
+      ignore_errors: true
+
+    - name: Eliminar usuario de aplicación
+      user:
+        name: "{{ web_user }}"
+        state: absent
+        remove: true  # elimina también el home
+      ignore_errors: true
+
+    - name: Mensaje final
+      debug:
+        msg: "Rollback completado: Apache detenido/desinstalado, index removido, firewall limpiado y usuario '{{ web_user }}' eliminado."
