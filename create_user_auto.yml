@@ -1,0 +1,11 @@
+---
+- name: Crear usuario automatico
+  hosts: all
+  become: true
+  vars:
+    username: "{{ gerardo }}"
+  tasks:
+    - name: Crear el usuario solicitado
+      ansible.builtin.user:
+        name: "{{ username }}"
+        state: present
