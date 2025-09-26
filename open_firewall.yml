@@ -1,0 +1,14 @@
+---
+- name: Abrir puerto 80 en firewall
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Permitir http permanentemente
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+
+    - name: Reload de firewall
+      command: firewall-cmd --reload
