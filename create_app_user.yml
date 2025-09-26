@@ -1,0 +1,11 @@
+---
+- name: Crear usuario appuser
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Crear usuario
+      user:
+        name: appuser
+        shell: /bin/bash
+        state: present
