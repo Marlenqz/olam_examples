@@ -1,0 +1,12 @@
+---
+- name: Eliminar usuario basado en survey
+  hosts: all
+  become: true
+  vars:
+    username: "{{ gerardo }}"
+  tasks:
+    - name: Eliminar usuario si existe
+      ansible.builtin.user:
+        name: "{{ username }}"
+        state: absent
+        remove: yes 
