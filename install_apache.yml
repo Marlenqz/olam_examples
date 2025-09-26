@@ -1,0 +1,16 @@
+---
+- name: Instalar Apache HTTPD
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Instalar paquete httpd
+      yum:
+        name: httpd
+        state: present
+
+    - name: Habilitar y arrancar servicio
+      service:
+        name: httpd
+        state: started
+        enabled: yes
