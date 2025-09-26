@@ -1,5 +1,5 @@
 ---
-- name: Eliminar usuario basado en survey
+- name: Eliminar usuario de forma automatica
   hosts: all
   become: true
   vars:
