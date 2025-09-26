@@ -2,11 +2,9 @@
 - name: Eliminar usuario de forma automatica
   hosts: all
   become: true
-  vars:
-    username: "{{ gerardo }}"
   tasks:
     - name: Eliminar usuario si existe
       ansible.builtin.user:
-        name: "{{ username }}"
+        name: gerardo
         state: absent
         remove: yes 
