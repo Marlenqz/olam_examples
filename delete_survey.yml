@@ -11,5 +11,5 @@
         name: "{{ item }}"
         state: absent
         remove: true
-      loop: "{{ usuarios_a_eliminar }}"
+      loop: "{{ lookup('vars', 'usuarios_a_eliminar', wantlist=True) }}"
       ignore_errors: true
