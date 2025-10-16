@@ -3,13 +3,23 @@
   hosts: all
   become: true
   vars:
-    # Esta variable será sobreescrita por el Survey
-    usuarios_a_eliminar: []
+    usuarios_a_eliminar: []   # sobrescrito por Survey
+
   tasks:
-    - name: Eliminar usuarios especificados
+    - name: Normaliza la entrada del Survey a lista
+      ansible.builtin.set_fact:
+        usuarios_list: >-
+          {{
+            usuarios_a_eliminar
+            if (usuarios_a_eliminar is sequence and usuarios_a_eliminar is not string)
+            else (usuarios_a_eliminar | default('') | split(','))
+          }}
+
+    - name: Elimina usuarios especificados
       ansible.builtin.user:
         name: "{{ item }}"
         state: absent
         remove: true
-      loop: "{{ lookup('vars', 'usuarios_a_eliminar', wantlist=True) }}"
+      loop: "{{ usuarios_list | map('trim') | reject('equalto','') | list }}"
       ignore_errors: true
+      when: usuarios_list | length > 0
